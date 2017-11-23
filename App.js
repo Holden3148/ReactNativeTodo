@@ -15,6 +15,7 @@ import {
   FlatList
 } from 'react-native';
 import { FormLabel, FormInput } from 'react-native-elements'
+import { v4 } from 'uuid'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -30,23 +31,44 @@ export default class App extends Component<{}> {
       todoText: '',
       items: [
         {
-          text: 'Some initial todo'
+          id: v4(),
+          text: 'Some initial todo',
+          done: false
         },
         {
-          text: 'another todo'
+          if: v4(),
+          text: 'another todo',
+          done: false
         }
       ]
     }
   }
   _renderTodo = ({ item }) => (
-    <Text>{item.text}</Text>
+    <Text
+    onPress={() => this._onTodoPressed(item)}
+      style={{
+        textDecorationLine: item.done ? 'line-through' : 'none'
+      }}>
+      {item.text}
+    </Text>
   )
+  _onTodoPressed = (todo) => {
+    const items = this.state.items.map(item => {
+      if (item.id === todo.id) {
+        item.done = !item.done
+      }
+      return item
+    })
+    this.setState({items})
+  }
   _extractKey = (_, index) => index
   _onTextChange = (todoText) => this.setState({ todoText })
   _onAddPressed = () => {
     const items = this.state.items
     items.push({
-      text: this.state.todoText
+      id: v4(),
+      text: this.state.todoText,
+      done: false
     })
     this.setState({
       items,
@@ -68,16 +90,16 @@ export default class App extends Component<{}> {
           data={this.state.items}
           keyExtractor={this._extractKey}
           renderItem={this._renderTodo} />
-        <View style={{ 
-            flexDirection: 'row', 
-            alignContent: 'center',
-            justifyContent: 'center'
-          }}>
-          <View style={{ flex: 1, flexDirection: 'column'}}>
-          <FormLabel>New Todo</FormLabel>
-          <FormInput
-            onChangeText={this._onTextChange} 
-            value={this.state.todoText}
+        <View style={{
+          flexDirection: 'row',
+          alignContent: 'center',
+          justifyContent: 'center'
+        }}>
+          <View style={{ flex: 1, flexDirection: 'column' }}>
+            <FormLabel>New Todo</FormLabel>
+            <FormInput
+              onChangeText={this._onTextChange}
+              value={this.state.todoText}
             />
           </View>
           <Button title='Add' onPress={this._onAddPressed} />
