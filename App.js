@@ -14,6 +14,7 @@ import {
   Button,
   FlatList
 } from 'react-native';
+import { FormLabel, FormInput } from 'react-native-elements'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -37,11 +38,11 @@ export default class App extends Component<{}> {
       ]
     }
   }
-  _renderTodo = ({item}) => (
+  _renderTodo = ({ item }) => (
     <Text>{item.text}</Text>
   )
   _extractKey = (_, index) => index
-  _onTextChange = (todoText) => this.setState({todoText})
+  _onTextChange = (todoText) => this.setState({ todoText })
   _onAddPressed = () => {
     const items = this.state.items
     items.push({
@@ -55,16 +56,30 @@ export default class App extends Component<{}> {
   render() {
     return (
       <View style={styles.container}>
+        <View style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          margin: 20
+        }}>
+          <Text style={{ fontSize: 22 }}>Todos</Text>
+        </View>
         <FlatList
-          style={{flex: 1}}
+          style={{ flex: 1 }}
           data={this.state.items}
           keyExtractor={this._extractKey}
           renderItem={this._renderTodo} />
-        <View style={{flexDirection: 'row'}}>
-          <TextInput
-            style={{flex: 1}}
+        <View style={{ 
+            flexDirection: 'row', 
+            alignContent: 'center',
+            justifyContent: 'center'
+          }}>
+          <View style={{ flex: 1, flexDirection: 'column'}}>
+          <FormLabel>New Todo</FormLabel>
+          <FormInput
+            onChangeText={this._onTextChange} 
             value={this.state.todoText}
-            onChangeText={this._onTextChange} />
+            />
+          </View>
           <Button title='Add' onPress={this._onAddPressed} />
         </View>
       </View>
@@ -76,8 +91,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
   welcome: {
