@@ -45,7 +45,7 @@ export default class App extends Component<{}> {
   }
   _renderTodo = ({ item }) => (
     <Text
-    onPress={() => this._onTodoPressed(item)}
+      onPress={() => this._onTodoPressed(item)}
       style={{
         textDecorationLine: item.done ? 'line-through' : 'none'
       }}>
@@ -59,7 +59,7 @@ export default class App extends Component<{}> {
       }
       return item
     })
-    this.setState({items})
+    this.setState({ items })
   }
   _extractKey = (_, index) => index
   _onTextChange = (todoText) => this.setState({ todoText })
